@@ -1,9 +1,17 @@
 import openai
+import os
+import environ
+from pathlib import Path
 from sklearn.metrics.pairwise import cosine_similarity
 from time import sleep
 
+env = environ.Env()
+env.read_env()
+
 # Set up OpenAI API key
-openai.api_key = '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'
+BASE_DIR = Path(__file__).resolve().parent.parent
+API_KEY = env("API_KEY")
+openai.api_key = API_KEY
 
 
 def get_description(skill):
