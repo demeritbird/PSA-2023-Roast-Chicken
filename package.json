@@ -1,0 +1,14 @@
+{
+  "name": "psa-2023-roast-chicken",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "start:client": "cd client && npm run dev",
+    "start:server": "cd server && python manage.py runserver"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/demeritbird/PSA-2023-Roast-Chicken.git"
+  },
+  "license": "ISC"
+}
