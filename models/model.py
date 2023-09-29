@@ -1,19 +1,9 @@
 import openai
-import os
-import environ
 from sklearn.metrics.pairwise import cosine_similarity
 from time import sleep
 
 # Set up OpenAI API key
 openai.api_key = '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'
-
-# Input format
-# {
-#   "id": int
-#   "name": string
-#   "skills": string
-#   "team": int (null or 0? if no group)
-# }
 
 
 def get_description(skill):
