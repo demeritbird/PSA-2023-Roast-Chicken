@@ -1,5 +1,5 @@
 import openai
-import os
+import json
 import environ
 from pathlib import Path
 from sklearn.metrics.pairwise import cosine_similarity
@@ -10,7 +10,9 @@ env.read_env()
 
 # Set up OpenAI API key
 BASE_DIR = Path(__file__).resolve().parent.parent
-API_KEY = env("API_KEY")
+API_KEY = env("API_KEY", default=None)
+if not API_KEY:
+    raise Exception("API_KEY not found in environment variables")
 openai.api_key = API_KEY
 
 
@@ -31,25 +33,27 @@ def get_embedding(description):
     return openai.Embedding.create(input=[description], model="text-embedding-ada-002")['data'][0]['embedding']
 
 
-# List of skills
-# skills = ["Python", "JavaScript", "Java", "C#",
-#           "PHP", "C++", "Rust", "Go", "Swift", "TypeScript"]
-skills = ["javascript", "css"]
+def calculate_similarities(request):
+    # Retrieve parameters
+    data = json.loads(request.body)
 
-# Get descriptions and embeddings for each skill
-descriptions = {skill: get_description(skill) for skill in skills}
-embeddings = {skill: get_embedding(desc)
-              for skill, desc in descriptions.items()}
+    result = json.dumps(data)
+    return result
+    # param1 = data.get('param1')
+    # param2 = data.get('param2')
 
-# Calculate cosine similarity between each pair of skills
-similarities = {}
-for i, skill1 in enumerate(skills):
-    for j, skill2 in enumerate(skills):
-        if i < j:
-            similarity = cosine_similarity(
-                [embeddings[skill1]], [embeddings[skill2]])
-            similarities[(skill1, skill2)] = similarity[0][0]
+    # skills = ["javascript", "css"]
+    # descriptions = {skill: get_description(skill) for skill in skills}
+    # embeddings = {skill: get_embedding(desc)
+    #               for skill, desc in descriptions.items()}
 
-# Print similarities
-for (skill1, skill2), similarity in similarities.items():
-    print(f"Similarity between {skill1} and {skill2}: {similarity:.2f}")
+    # similarities = {}
+    # for i, skill1 in enumerate(skills):
+    #     for j, skill2 in enumerate(skills):
+    #         if i < j:
+    #             similarity = cosine_similarity(
+    #                 [embeddings[skill1]], [embeddings[skill2]])
+    #             similarities[(skill1, skill2)] = similarity[0][0]
+
+    # result = json.dumps(similarities)
+    # return result
