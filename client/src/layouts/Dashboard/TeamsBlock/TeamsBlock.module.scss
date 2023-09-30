@@ -1,0 +1,36 @@
+@use "./../../../../styles/main.scss" as *;
+
+.container {
+  height: 48rem;
+  width: 96rem;
+
+  border-radius: 2rem;
+  background-color: white;
+
+  box-shadow: 0px 12px 48px 0px rgba(0, 0, 0, 0.25);
+  padding: 3.2rem;
+}
+
+.container__title {
+  color: $color-black;
+  font-family: "Poppins", sans-serif;
+  font-size: 3.906rem;
+  font-style: normal;
+  font-weight: 600;
+
+  margin-bottom: 2.8rem;
+}
+
+.container__body {
+  height: 30rem;
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.container__body > *:not(:last-child) {
+  margin-right: 4rem;
+}
