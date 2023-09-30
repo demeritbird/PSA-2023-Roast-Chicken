@@ -1,0 +1,14 @@
+[
+  [{ "id": 1, "name": "john", "skills": ["javascript"] }],
+  [
+    { "id": 101, "skills_needed": ["java"], "members": [] },
+    { "id": 102, "skills_needed": ["python"], "members": [] },
+    {
+      "id": 103,
+      "skills_needed": ["javascript", "spring"],
+      "members": [
+        { "id": 3, "name": "alice", "skills": ["java", "spring"], "team": 103 }
+      ]
+    }
+  ]
+]
