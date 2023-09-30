@@ -1,4 +1,5 @@
 import styles from './DashboardLayout.module.scss';
+import MembersBlock from './MembersBlock';
 import SummaryBlock from './SummaryBlock';
 import TeamsBlock from './TeamsBlock/TeamsBlock';
 
@@ -13,7 +14,9 @@ function DashboardLayout() {
           </div>
         </div>
       </div>
-      <div className={styles.bound__right}></div>
+      <div className={styles.bound__right}>
+        <MembersBlock />
+      </div>
     </div>
   );
 }
