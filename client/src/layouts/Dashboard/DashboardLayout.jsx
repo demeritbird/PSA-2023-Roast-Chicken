@@ -1,3 +1,4 @@
+import useData from '../../hooks/useData';
 import styles from './DashboardLayout.module.scss';
 import MembersBlock from './MembersBlock';
 import SummaryBlock from './SummaryBlock';
