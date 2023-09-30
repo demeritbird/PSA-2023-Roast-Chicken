@@ -30,6 +30,23 @@ if __name__ == "__main__":
         print("Usage: python my_script.py [function_name]")
 
 
+def get_description(skill):
+    prompt = "What is " + skill + "? Summarize in 150 words or less."
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        max_tokens=50,
+        messages=[
+            {"role": "user", "content": prompt}
+        ],
+    )
+    sleep(0.5)
+    return response.choices[0]["message"]["content"]
+
+
+def get_embedding(description):
+    return openai.Embedding.create(input=[description], model="text-embedding-ada-002")['data'][0]['embedding']
+
+
 def calculate_similarities(request, top_n=3):
     # Retrieve parameters
     data = json.loads(request)
