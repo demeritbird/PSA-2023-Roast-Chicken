@@ -1,0 +1,67 @@
+@use "./../../../styles/main.scss" as *;
+
+.card {
+  height: 32rem;
+  width: 25rem;
+
+  border-radius: 2rem;
+  background: linear-gradient(180deg, #c2ccff 0%, #f4f6ff 100%);
+
+  padding: 3.2rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card__image {
+  height: 12rem;
+  width: 12rem;
+  border-radius: 50%;
+  margin-bottom: 0.4rem;
+}
+
+.card__title {
+  color: #000;
+  text-align: center;
+  font-family: "Open Sans", sans-serif;
+  font-size: 25.109px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.card__subtitle {
+  color: #515151;
+  text-align: center;
+  font-family: Open Sans;
+  font-size: 10.761px;
+  font-style: normal;
+  font-weight: 400;
+
+  margin-bottom: 2rem;
+}
+
+.card__action-btn {
+  width: 20rem;
+  height: 3.2rem;
+  border: none;
+  outline: none;
+  border-radius: 0.8rem;
+  background: #fff;
+  box-shadow: 0px 3.6px 3.6px 0px rgba(0, 0, 0, 0.25);
+
+  font-family: "Poppins", sans-serif;
+  font-size: 12.658px;
+  font-style: normal;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(-0.4px);
+  }
+}
