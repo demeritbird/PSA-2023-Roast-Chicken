@@ -1,0 +1,65 @@
+@use "./../../../../styles/main.scss" as *;
+
+.bound {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  margin: 6rem 2rem 12rem 2rem;
+  height: 84rem;
+  width: 54rem;
+  background-color: white;
+  border-radius: 2rem;
+
+  box-shadow: 0px 12px 48px 0px rgba(0, 0, 0, 0.25);
+
+  padding: 3.6rem 4.8rem;
+}
+.container__heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.heading__image {
+  height: 9.6rem;
+  width: 9.6rem;
+  border-radius: 50%;
+}
+
+.heading__text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.heading__text--header {
+  color: #000;
+  font-family: "Poppins", sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.heading__text--subheader {
+  color: #747474;
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 300;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.container__body {
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  width: 100%;
+
+  margin-top: 2rem;
+
+  overflow: scroll;
+}
