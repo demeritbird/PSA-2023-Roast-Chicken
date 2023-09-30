@@ -1,5 +1,9 @@
 import { createContext, useState } from 'react';
 
+function assignMembersToTeam(arr, teamId) {
+  return arr.filter((member) => member.team === teamId);
+}
+
 const initialMemberArr = [
   { id: 1, name: 'john', skills: ['javascript'], team: 101 },
   { id: 2, name: 'jane', skills: ['python'], team: 102 },
@@ -17,52 +21,52 @@ const initialTeamArr = [
   {
     id: 101,
     skills_needed: ['java'],
-    members: [{ id: 1, name: 'john', skills: 'javascript', team: 101 }],
+    members: assignMembersToTeam(initialMemberArr, 101),
   },
   {
     id: 102,
     skills_needed: ['python'],
-    members: [{ id: 2, name: 'jane', skills: ['python'], team: 102 }],
+    members: assignMembersToTeam(initialMemberArr, 102),
   },
   {
     id: 103,
     skills_needed: ['javascript', 'spring'],
-    members: [{ id: 3, name: 'alice', skills: ['java', 'spring'], team: 103 }],
+    members: assignMembersToTeam(initialMemberArr, 103),
   },
   {
     id: 104,
     skills_needed: ['c++'],
-    members: [{ id: 4, name: 'bob', skills: ['c++', 'qt'], team: 104 }],
+    members: assignMembersToTeam(initialMemberArr, 104),
   },
   {
     id: 105,
     skills_needed: ['ruby'],
-    members: [{ id: 5, name: 'charlie', skills: ['ruby', 'rails'], team: 105 }],
+    members: assignMembersToTeam(initialMemberArr, 105),
   },
   {
     id: 106,
     skills_needed: ['php'],
-    members: [{ id: 6, name: 'dave', skills: ['php', 'laravel'], team: 106 }],
+    members: assignMembersToTeam(initialMemberArr, 106),
   },
   {
     id: 107,
     skills_needed: ['go'],
-    members: [{ id: 7, name: 'eve', skills: ['go'], team: 107 }],
+    members: assignMembersToTeam(initialMemberArr, 107),
   },
   {
     id: 108,
     skills_needed: ['rust'],
-    members: [{ id: 8, name: 'frank', skills: ['rust'], team: 108 }],
+    members: assignMembersToTeam(initialMemberArr, 108),
   },
   {
     id: 109,
     skills_needed: ['typescript'],
-    members: [{ id: 9, name: 'grace', skills: ['typescript', 'angular'], team: 109 }],
+    members: assignMembersToTeam(initialMemberArr, 109),
   },
   {
     id: 110,
     skills_needed: ['swift', 'typescript', 'angular'],
-    members: [{ id: 10, name: 'hank', skills: ['swift'], team: 110 }],
+    members: assignMembersToTeam(initialMemberArr, 110),
   },
 ];
 
