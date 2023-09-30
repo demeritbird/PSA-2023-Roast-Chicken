@@ -1,9 +1,40 @@
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useReducer } from 'react';
 import axios from 'axios';
 import styles from './App.module.scss';
 import { Routes, Route } from 'react-router-dom';
 
+import { useNavigate } from 'react-router-dom';
+
 function App() {
+  const navigate = useNavigate();
+
+  const initialRouteState = {
+    dashboard: true,
+    changes: false,
+  };
+  const [routeState, routeDispatch] = useReducer(routeReducer, initialRouteState);
+  function routeReducer(_, action) {
+    let newRouteState;
+    switch (action.type) {
+      case 'dashboard':
+        newRouteState = { dashboard: true, changes: false };
+        break;
+      case 'changes':
+        newRouteState = { dashboard: false, changes: true };
+        break;
+      default:
+        throw new Error();
+    }
+    return newRouteState;
+  }
+  useEffect(() => {
+    if (routeState.dashboard) {
+      navigate('/');
+    } else if (routeState.changes) {
+      navigate('/changes');
+    }
+  }, [routeState.dashboard, routeState.changes, navigate]);
+
   useEffect(() => {
     axios
       .get('http://127.0.0.1:8000/')
@@ -28,7 +59,17 @@ function App() {
 
               <div className={styles.sidebar__body}>
                 <div
-                  className={`${styles['sidebar__route']} ${styles['sidebar__route--active']}`}
+                  className={`${styles['sidebar__route']} 
+                              ${
+                                routeState.dashboard
+                                  ? `${styles['sidebar__route--active']}`
+                                  : ''
+                              }`}
+                  onClick={() =>
+                    routeDispatch({
+                      type: 'dashboard',
+                    })
+                  }
                 >
                   <div className={`${styles['sidebar__route-icon']}`}>
                     <svg
@@ -43,7 +84,17 @@ function App() {
                   </div>
                   <h4 className={`${styles['sidebar__route-text']}`}>Dashboard</h4>
                 </div>
-                <div className={`${styles['sidebar__route']}`}>
+                <div
+                  className={`${styles['sidebar__route']} 
+                            ${
+                              routeState.changes ? `${styles['sidebar__route--active']}` : ''
+                            }`}
+                  onClick={() =>
+                    routeDispatch({
+                      type: 'changes',
+                    })
+                  }
+                >
                   <div className={`${styles['sidebar__route-icon']}`}>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
@@ -79,7 +130,12 @@ function App() {
                 to be made
               </h4>
             </header>
-            <main className={styles.container__main}></main>
+            <main className={styles.container__main}>
+              <Routes>
+                <Route path='/' element={<div>1</div>} />
+                <Route path='/changes' element={<div>2</div>} />
+              </Routes>
+            </main>
           </div>
         </div>
       </div>

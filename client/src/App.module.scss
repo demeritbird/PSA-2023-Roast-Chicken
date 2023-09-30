@@ -93,6 +93,8 @@
     padding-left: 3.6rem;
     margin-bottom: 0.4rem;
 
+    cursor: pointer;
+
     &--active::before {
       content: "";
       position: absolute;
