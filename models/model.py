@@ -4,6 +4,7 @@ import environ
 from pathlib import Path
 from sklearn.metrics.pairwise import cosine_similarity
 from time import sleep
+import sys
 
 env = environ.Env()
 env.read_env()
@@ -14,6 +15,18 @@ API_KEY = env("API_KEY", default=None)
 if not API_KEY:
     raise Exception("API_KEY not found in environment variables")
 openai.api_key = API_KEY
+
+if __name__ == "__main__":
+    # Check if a specific function name is provided as a command line argument
+    if len(sys.argv) == 2:
+        function_name = sys.argv[1]
+        if function_name == "calculate_similarities":
+            result = calculate_similarities()
+            print(result)
+        else:
+            print(f"Function '{function_name}' not found.")
+    else:
+        print("Usage: python my_script.py [function_name]")
 
 
 def get_description(skill):
@@ -37,7 +50,11 @@ def calculate_similarities(request):
     # Retrieve parameters
     data = json.loads(request.body)
 
+    # data_json = '[[{"id": 1, "name": "john", "skills": "javascript", "team": 101}, {"id": 2, "name": "jane", "skills": ["python"], "team": 102}], [{"id": 101, "skills_needed": ["javascript"], "members": [{"id": 1, "name": "john", "skills": "javascript", "team": 101}]}, {"id": 102, "skills_needed": ["python"], "members": [{"id": 2, "name": "jane", "skills": ["python"], "team": 102}]}]]'
+    # data = json.loads(data_json)
+
     result = json.dumps(data)
+
     return result
     # param1 = data.get('param1')
     # param2 = data.get('param2')
@@ -57,3 +74,4 @@ def calculate_similarities(request):
 
     # result = json.dumps(similarities)
     # return result
+
