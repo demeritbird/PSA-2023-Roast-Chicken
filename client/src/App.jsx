@@ -4,6 +4,8 @@ import styles from './App.module.scss';
 import { Routes, Route } from 'react-router-dom';
 
 import { useNavigate } from 'react-router-dom';
+import DashboardLayout from './layouts/Dashboard/DashboardLayout';
+import ChangesLayout from './layouts/Changes/ChangesLayout';
 
 function App() {
   const navigate = useNavigate();
@@ -132,8 +134,8 @@ function App() {
             </header>
             <main className={styles.container__main}>
               <Routes>
-                <Route path='/' element={<div>1</div>} />
-                <Route path='/changes' element={<div>2</div>} />
+                <Route path='/' element={<DashboardLayout />} />
+                <Route path='/changes' element={<ChangesLayout />} />
               </Routes>
             </main>
           </div>
