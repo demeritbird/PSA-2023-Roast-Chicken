@@ -4,6 +4,9 @@ import os
 def create_database(db_path="embeddings.db"):
     """
     Creates a SQLite3 database at the given path.
+
+    Args:
+    - db_path (str): Path to the SQLite3 database. Default is "embeddings.db".
     """
 
     if os.path.exists(db_path):

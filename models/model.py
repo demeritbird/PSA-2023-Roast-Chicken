@@ -1,5 +1,4 @@
 import openai
-import json
 import environ
 import sys
 from pathlib import Path
