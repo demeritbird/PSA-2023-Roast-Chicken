@@ -6,9 +6,13 @@ import { Routes, Route } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from './layouts/Dashboard/DashboardLayout';
 import ChangesLayout from './layouts/Changes/ChangesLayout';
+import useData from './hooks/useData';
 
 function App() {
   const navigate = useNavigate();
+  const { teamArr, memberArr } = useData();
+
+  const totalArr = [memberArr, teamArr];
 
   const initialRouteState = {
     dashboard: true,
@@ -39,7 +43,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get('http://127.0.0.1:8000/')
+      .post('http://127.0.0.1:8000/', totalArr)
       .then((res) => {
         console.log(res.data);
       })
