@@ -5,20 +5,39 @@ from time import sleep
 
 
 def get_description(skill):
+    """
+    get_description uses the OpenAI API to generate a description for a given skill.
+
+    Args:
+    - skill (str): The skill for which the description is needed.
+
+    Returns:
+    - str: A description for the given skill.
+    """
     prompt = "What is " + skill + "? Summarize in 150 words or less."
     response = openai.ChatCompletion.create(
         model="gpt-4",
-        max_tokens=50,
+        max_tokens=50, # Increase to get longer descriptions
         messages=[
             {"role": "user", "content": prompt}
         ],
     )
-    sleep(1)
+    sleep(1) # Wait for 1 second to avoid rate limiting
     return response.choices[0]["message"]["content"]
 
 
 def get_embedding(description):
-    sleep(10)
+    """
+    get_embedding uses the OpenAI API to generate an embedding for a given description.
+
+    Args:
+    - description (str): The description for which the embedding is needed.
+
+    Returns:
+    - list: The embedding for the given description.
+    """
+
+    sleep(10) # Wait for n seconds to avoid rate limiting (3rpm)
     return openai.Embedding.create(input=[description], model="text-embedding-ada-002")['data'][0]['embedding']
 
 def get_embedding_from_db(description, skill, db_path="embeddings.db"):
@@ -65,6 +84,15 @@ def get_embedding_from_db(description, skill, db_path="embeddings.db"):
 
 
 def get_employees(data):
+    """
+    Retrieves the employees data from the given data.
+
+    Args:
+    - data (list): A list containing the employees data.
+
+    Returns:
+    - list: A list containing dictionaries of the reformatted employees data.
+    """
     result = []
     for employee in data[0]:
         emp_id = employee.get('id')
@@ -77,6 +105,15 @@ def get_employees(data):
 
 
 def get_projects(data):
+    """
+    Retrieves the projects data from the given data.
+
+    Args:
+    - data (list): A list containing the projects data.
+
+    Returns:
+    - list: A list containing dictionaries of the reformatted projects data.
+    """
     result = []
     for project in data[1]:
         team_id = project.get('id')
