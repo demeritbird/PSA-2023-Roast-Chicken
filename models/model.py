@@ -3,9 +3,8 @@ import json
 import environ
 import sys
 from pathlib import Path
-from sklearn.metrics.pairwise import cosine_similarity
-from time import sleep
-from utils import get_description, get_embedding, get_employees, get_projects
+from database import create_database, delete_embedding, delete_database
+from calculation import calculate_similarities
 
 env = environ.Env()
 env.read_env()
@@ -30,66 +29,33 @@ if __name__ == "__main__":
         print("Usage: python my_script.py [function_name]")
 
 
-def get_description(skill):
-    prompt = "What is " + skill + "? Summarize in 150 words or less."
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        max_tokens=50,
-        messages=[
-            {"role": "user", "content": prompt}
-        ],
-    )
-    sleep(0.5)
-    return response.choices[0]["message"]["content"]
-
-
-def get_embedding(description):
-    return openai.Embedding.create(input=[description], model="text-embedding-ada-002")['data'][0]['embedding']
-
-
-def calculate_similarities(request, top_n=3):
-    # Retrieve parameters
-    data = json.loads(request)
-    employees = get_employees(data)
-    projects = get_projects(data)
-
-    for employee in employees:
-        skills = employee.get('skills')
-        skill_embeddings = [get_embedding(
-            get_description(skill)) for skill in skills]
-        # Average the embeddings
-        avg_embedding = [sum(x)/len(x) for x in zip(*skill_embeddings)]
-        employee['skill_embeddings'] = avg_embedding
-
-    for project in projects:
-        skills_needed = project.get('skills_needed')
-        skill_embeddings = [get_embedding(
-            get_description(skill)) for skill in skills_needed]
-        # Average the embeddings
-        avg_embedding = [sum(x)/len(x) for x in zip(*skill_embeddings)]
-        project['skill_needed_embeddings'] = avg_embedding
-
-    # Assign projects to employees based on similarity scores
-    assignments = {}
-    for employee in employees:
-        similarity_scores = []
-        for project in projects:
-            score = cosine_similarity([employee['skill_embeddings']], [
-                                      project['skill_needed_embeddings']])[0][0]
-            # Fix the KeyError here
-            similarity_scores.append((project['team_id'], score))
-
-        # Sort projects based on similarity scores and get top_n projects
-        top_projects = sorted(
-            similarity_scores, key=lambda x: x[1], reverse=True)[:top_n]
-        assignments[employee['emp_id']] = [
-            project_id for project_id, _ in top_projects]
-
-    print(assignments)
-    return assignments
-
-
-request = [[{"id": 1, "name": "john", "skills": ["javascript"], "team": 101}, {"id": 2, "name": "jane", "skills": ["python"], "team": 102}], [{"id": 101, "skills_needed": ["javascript"], "members": [
-    {"id": 1, "name": "john", "skills": "javascript", "team": 101}]}, {"id": 102, "skills_needed": ["python"], "members": [{"id": 2, "name": "jane", "skills": ["python"], "team": 102}]}]]
+create_database()
+request = [
+    [
+        {"id": 1, "name": "john", "skills": ["javascript"], "team": 101},
+        {"id": 2, "name": "jane", "skills": ["python"], "team": 102},
+        {"id": 3, "name": "alice", "skills": ["java", "spring"], "team": 103},
+        {"id": 4, "name": "bob", "skills": ["c++", "qt"], "team": 104},
+        {"id": 5, "name": "charlie", "skills": ["ruby", "rails"], "team": 105},
+        {"id": 6, "name": "dave", "skills": ["php", "laravel"], "team": 106},
+        {"id": 7, "name": "eve", "skills": ["go"], "team": 107},
+        {"id": 8, "name": "frank", "skills": ["rust"], "team": 108},
+        {"id": 9, "name": "grace", "skills": ["typescript", "angular"], "team": 109},
+        {"id": 10, "name": "hank", "skills": ["swift"], "team": 110}
+    ],
+    [
+        {"id": 101, "skills_needed": ["java"], "members": [{"id": 1, "name": "john", "skills": "javascript", "team": 101}]},
+        {"id": 102, "skills_needed": ["python"], "members": [{"id": 2, "name": "jane", "skills": ["python"], "team": 102}]},
+        {"id": 103, "skills_needed": ["javascript", "spring"], "members": [{"id": 3, "name": "alice", "skills": ["java", "spring"], "team": 103}]},
+        {"id": 104, "skills_needed": ["c++"], "members": [{"id": 4, "name": "bob", "skills": ["c++", "qt"], "team": 104}]},
+        {"id": 105, "skills_needed": ["ruby"], "members": [{"id": 5, "name": "charlie", "skills": ["ruby", "rails"], "team": 105}]},
+        {"id": 106, "skills_needed": ["php"], "members": [{"id": 6, "name": "dave", "skills": ["php", "laravel"], "team": 106}]},
+        {"id": 107, "skills_needed": ["go"], "members": [{"id": 7, "name": "eve", "skills": ["go"], "team": 107}]},
+        {"id": 108, "skills_needed": ["rust"], "members": [{"id": 8, "name": "frank", "skills": ["rust"], "team": 108}]},
+        {"id": 109, "skills_needed": ["typescript"], "members": [{"id": 9, "name": "grace", "skills": ["typescript", "angular"], "team": 109}]},
+        {"id": 110, "skills_needed": ["swift", "typescript", "angular"], "members": [{"id": 10, "name": "hank", "skills": ["swift"], "team": 110}]}
+    ]
+]
+# Notice for swaps between 1 and 3, 9 and 10
 request = json.dumps(request)
 calculate_similarities(request)
