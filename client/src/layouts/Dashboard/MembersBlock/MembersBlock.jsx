@@ -16,8 +16,8 @@ function MembersBlock() {
           <img src={teamLogo} alt='team logo' className={styles.heading__image}></img>
         </div>
         <div className={styles['flex-row']}>
-          {skillsArray.map((skill) => {
-            return <p>{skill}</p>;
+          {skillsArray.map((skill, idx) => {
+            return <p key={idx}>{skill}</p>;
           })}
         </div>
 
