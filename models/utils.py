@@ -37,7 +37,7 @@ def get_embedding(description):
     - list: The embedding for the given description.
     """
 
-    sleep(10) # Wait for n seconds to avoid rate limiting (3rpm)
+    sleep(15) # Wait for n seconds to avoid rate limiting (3rpm)
     return openai.Embedding.create(input=[description], model="text-embedding-ada-002")['data'][0]['embedding']
 
 def get_embedding_from_db(skill, db_path="embeddings.db"):

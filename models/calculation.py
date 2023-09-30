@@ -16,7 +16,7 @@ def calculate_assignments(request, top_n=3):
     """
 
     # Format and retrieve data
-    data = json.loads(request)
+    data = request
     employees = get_employees(data)
     projects = get_projects(data)
 
