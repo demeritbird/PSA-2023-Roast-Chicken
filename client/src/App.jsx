@@ -63,7 +63,6 @@ function App() {
         const entries = Object.entries(JSON.parse(res.data.result)).sort(
           (a, b) => a[1].length - b[1].length
         );
-        console.log(JSON.parse(res.data.result));
 
         let maxLength = 0;
         for (const [, subarray] of entries) {
@@ -71,70 +70,88 @@ function App() {
             maxLength = subarray.length;
           }
         }
-        let tempfilledMemberArr = [];
-        let tempAvailableTeamIdArr = availableTeamIdArr;
 
-        // ["1", [101,102]]
-        // First round: assign them to original group
-        entries.forEach((cur, idx) => {
-          if (cur[0] === (cur[1][0] - 100).toString()) {
-            setFilledTeamIdArr((prevFilledTeamIdArr) => ({
-              ...prevFilledTeamIdArr,
-              [cur[0]]: {
-                team: cur[1][0],
-                type: 1,
-                same: cur[0] === (cur[1][0] - 100).toString(),
-              },
-            }));
-            setAvailableTeamIdArr((prevAvailableTeamIdArr) =>
-              prevAvailableTeamIdArr.filter((item) => item !== cur[1][0])
-            );
-            tempAvailableTeamIdArr = tempAvailableTeamIdArr.filter(
-              (item) => item !== cur[1][0]
-            );
-          } else {
-            tempfilledMemberArr.push(cur);
-          }
-        });
-
-        // second round, if they have more than 1 pref, then try to search for them and use them
-        tempfilledMemberArr.forEach((cur) => {
-          cur[1].forEach((pref) => {
-            if (tempAvailableTeamIdArr.includes(pref)) {
-              setFilledTeamIdArr((prevFilledTeamIdArr) => ({
-                ...prevFilledTeamIdArr,
-                [cur[0]]: { team: pref, type: 2, same: cur[0] === pref },
-              }));
-              setAvailableTeamIdArr((prevAvailableTeamIdArr) =>
-                prevAvailableTeamIdArr.filter((item) => item !== pref)
-              );
-              tempAvailableTeamIdArr = tempAvailableTeamIdArr.filter((item) => item !== pref);
-              tempfilledMemberArr = tempfilledMemberArr.filter((item) => item !== cur);
-              return;
-            }
-          });
-        });
-
-        //third round, if same id and same team id, match them together.
-        tempAvailableTeamIdArr.forEach((cur, idx) => {
-          setFilledTeamIdArr((prevFilledTeamIdArr) => ({
-            ...prevFilledTeamIdArr,
-            [tempfilledMemberArr[idx][0]]: {
-              team: cur,
-              type: 3,
-              same: tempfilledMemberArr[idx][0] === (cur - 100).toString(),
-            },
-          }));
-          setAvailableTeamIdArr((prevAvailableTeamIdArr) =>
-            prevAvailableTeamIdArr.filter((item) => item !== cur)
-          );
-          tempAvailableTeamIdArr = tempAvailableTeamIdArr.filter((item) => item !== cur);
-        });
+        // assignToBestGroup(entries);
+        assignToFirstGroup(entries);
       })
       .catch((err) => {
         console.error(err);
       });
   }, []);
+
+  function assignToFirstGroup(entries) {
+    let tempGroup = {};
+    entries.forEach((cur, idx) => {
+      tempGroup[cur[0]] = {
+        team: cur[1][0],
+        type: 0,
+        same: cur[0] === (cur[1][0] - 100).toString(),
+      };
+    });
+
+    setFilledTeamIdArr(tempGroup);
+    setAvailableTeamIdArr([]);
+  }
+
+  function assignToBestGroup(entries) {
+    let tempfilledMemberArr = [];
+    let tempAvailableTeamIdArr = availableTeamIdArr;
+
+    // ["1", [101,102]]
+    // First round: assign them to original group
+    entries.forEach((cur, idx) => {
+      if (cur[0] === (cur[1][0] - 100).toString()) {
+        setFilledTeamIdArr((prevFilledTeamIdArr) => ({
+          ...prevFilledTeamIdArr,
+          [cur[0]]: {
+            team: cur[1][0],
+            type: 1,
+            same: cur[0] === (cur[1][0] - 100).toString(),
+          },
+        }));
+        setAvailableTeamIdArr((prevAvailableTeamIdArr) =>
+          prevAvailableTeamIdArr.filter((item) => item !== cur[1][0])
+        );
+        tempAvailableTeamIdArr = tempAvailableTeamIdArr.filter((item) => item !== cur[1][0]);
+      } else {
+        tempfilledMemberArr.push(cur);
+      }
+    });
+
+    // second round, if they have more than 1 pref, then try to search for them and use them
+    tempfilledMemberArr.forEach((cur) => {
+      cur[1].forEach((pref) => {
+        if (tempAvailableTeamIdArr.includes(pref)) {
+          setFilledTeamIdArr((prevFilledTeamIdArr) => ({
+            ...prevFilledTeamIdArr,
+            [cur[0]]: { team: pref, type: 2, same: cur[0] === pref },
+          }));
+          setAvailableTeamIdArr((prevAvailableTeamIdArr) =>
+            prevAvailableTeamIdArr.filter((item) => item !== pref)
+          );
+          tempAvailableTeamIdArr = tempAvailableTeamIdArr.filter((item) => item !== pref);
+          tempfilledMemberArr = tempfilledMemberArr.filter((item) => item !== cur);
+          return;
+        }
+      });
+    });
+
+    //third round, if same id and same team id, match them together.
+    tempAvailableTeamIdArr.forEach((cur, idx) => {
+      setFilledTeamIdArr((prevFilledTeamIdArr) => ({
+        ...prevFilledTeamIdArr,
+        [tempfilledMemberArr[idx][0]]: {
+          team: cur,
+          type: 3,
+          same: tempfilledMemberArr[idx][0] === (cur - 100).toString(),
+        },
+      }));
+      setAvailableTeamIdArr((prevAvailableTeamIdArr) =>
+        prevAvailableTeamIdArr.filter((item) => item !== cur)
+      );
+      tempAvailableTeamIdArr = tempAvailableTeamIdArr.filter((item) => item !== cur);
+    });
+  }
 
   let count = 0;
   for (const key in result) {
