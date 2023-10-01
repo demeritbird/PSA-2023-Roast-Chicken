@@ -1,11 +1,19 @@
 @use "./../../../styles/main.scss" as *;
 
 .card {
-  width: 45rem;
+  width: 120rem;
   height: 8rem;
 
-  border-bottom: 1px solid #bababa;
-  padding: 0 1.2rem;
+  background-color: white;
+  border-radius: 1.2rem;
+  padding: 1.2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .flex-split-row {
@@ -46,4 +54,18 @@
   font-family: Poppins;
   font-size: 1.6rem;
   font-weight: 400;
+
+  &--new {
+    color: red;
+  }
+}
+
+.flex-row {
+  margin: 0 8rem;
+  font-size: 1.4rem;
+}
+
+.arrow {
+  display: flex;
+  flex-direction: row;
 }

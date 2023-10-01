@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import useData from "../../hooks/useData";
-import styles from "./ChangesLayout.module.scss";
-import ChangeCard from "../../components/ChangeCard";
+import { useEffect, useState } from 'react';
+import useData from '../../hooks/useData';
+import styles from './ChangesLayout.module.scss';
+import ChangeCard from '../../components/ChangeCard';
 
 function ChangesLayout() {
-  const { teamArr, memberArr, selectTeamNo, result } = useData();
+  const { teamArr, memberArr, result } = useData();
   const [newMemberArr, setNewMemberArr] = useState(memberArr);
 
   useEffect(() => {
@@ -34,57 +34,25 @@ function ChangesLayout() {
       });
     });
 
-    const filteredArr = tempMemberArr.filter(
-      (item) => item.proposedTeam !== undefined
-    );
-
+    const filteredArr = tempMemberArr.filter((item) => item.proposedTeam !== undefined);
+    console.log(filteredArr, '!!');
     setNewMemberArr(filteredArr);
   }, []);
 
   useEffect(() => {
-    console.log(teamArr);
-    console.log(newMemberArr, "newMemberArr");
+    console.log(newMemberArr);
   }, [newMemberArr]);
 
-  const NewGroupedMembers = newMemberArr.reduce((acc, member) => {
-    if (!acc[member.team]) {
-      acc[member.team] = [];
-    }
-    acc[member.team].push(member);
-    return acc;
-  }, {});
-
   return (
-    // <div className={styles.background}>
-    //   <div className={styles.container}>
-    //     {memberArr[selectTeamNo].members.map((member, idx) => {
-    //       return (
-    //         <MemberCard
-    //           key={idx}
-    //           member={member}
-    //           team={memberArr[selectTeamNo]}
-    //         />
-    //       );
-    //     })}
-    //   </div>
-    // </div>
     <div className={styles.background}>
       <div className={styles.container}>
-        {/* {Object.entries(NewGroupedMembers).map(([team, teamMembers]) => {
-          teamMembers.map((member) => (
-            <ChangeCard key={member.id} member={member} team={team} />
-          ));
-        })} */}
-        {newMemberArr.map((member, idx) => {
-          return <ChangeCard key={idx} member={member} />;
-          // console.log(member);
-          // console.log(teamArr[selectTeamNo]);
-        })}
+        {newMemberArr.length !== 0 &&
+          newMemberArr.map((member, idx) => {
+            return <ChangeCard member={member} key={idx} />;
+          })}
       </div>
     </div>
   );
 }
-
-// console.log(member.id)
 
 export default ChangesLayout;
