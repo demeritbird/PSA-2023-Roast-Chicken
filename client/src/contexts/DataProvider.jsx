@@ -5,16 +5,16 @@ function assignMembersToTeam(arr, teamId) {
 }
 
 const initialMemberArr = [
-  { id: 1, name: 'john', skills: ['javascript'], team: 101 },
-  { id: 2, name: 'jane', skills: ['python'], team: 102 },
-  { id: 3, name: 'alice', skills: ['java', 'spring'], team: 103 },
+  { id: 1, name: 'john', skills: ['java', 'spring'], team: 101 },
+  { id: 2, name: 'jane', skills: ['rust'], team: 102 },
+  { id: 3, name: 'alice', skills: ['javascript'], team: 103 },
   { id: 4, name: 'bob', skills: ['c++', 'qt'], team: 104 },
   { id: 5, name: 'charlie', skills: ['ruby', 'rails'], team: 105 },
   { id: 6, name: 'dave', skills: ['php', 'laravel'], team: 106 },
-  { id: 7, name: 'eve', skills: ['go'], team: 107 },
-  { id: 8, name: 'frank', skills: ['rust'], team: 108 },
-  { id: 9, name: 'grace', skills: ['typescript', 'angular'], team: 109 },
-  { id: 10, name: 'hank', skills: ['swift'], team: 110 },
+  { id: 7, name: 'eve', skills: ['swift'], team: 107 },
+  { id: 8, name: 'frank', skills: ['python', 'angular'], team: 108 },
+  { id: 9, name: 'grace', skills: ['typescript'], team: 109 },
+  { id: 10, name: 'hank', skills: ['go'], team: 110 },
 ];
 
 const initialTeamArr = [

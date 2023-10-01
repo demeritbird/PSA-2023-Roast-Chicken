@@ -109,7 +109,7 @@ function App() {
                 prevAvailableTeamIdArr.filter((item) => item !== pref)
               );
               tempAvailableTeamIdArr = tempAvailableTeamIdArr.filter((item) => item !== pref);
-              tempfilledMemberArr = tempAvailableTeamIdArr.filter((item) => item !== cur);
+              tempfilledMemberArr = tempfilledMemberArr.filter((item) => item !== cur);
               return;
             }
           });
