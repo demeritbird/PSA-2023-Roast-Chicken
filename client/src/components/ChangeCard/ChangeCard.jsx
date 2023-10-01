@@ -1,8 +1,10 @@
-import styles from "./MemberCard.module.scss";
+import styles from "./ChangeCard.module.scss";
 import teamLogo from "./../../assets/final.png";
 
-function MemberCard(props) {
-  const { member, team } = props;
+function ChangeCard(props) {
+  const { member } = props;
+
+  console.log(member);
 
   return (
     <div className={styles.card}>
@@ -15,18 +17,14 @@ function MemberCard(props) {
               className={styles.card__image}
             ></img>
             <div className={styles["flex-column-start"]}>
-              <h4 className={styles.card__title}>{member.name}</h4>
-              <p className={styles.card__subtitle}>Team {team.id}</p>
+              <h4 className={styles.card__title}>Team {member.team}</h4>
+              <p className={styles.card__subtitle}>{member.name}</p>
             </div>
           </div>
-        </div>
-        <div>
-          {member.skills.map((skill, idx) => {
-            return <p key={idx}>{skill}</p>;
-          })}
         </div>
       </div>
     </div>
   );
 }
-export default MemberCard;
+
+export default ChangeCard;

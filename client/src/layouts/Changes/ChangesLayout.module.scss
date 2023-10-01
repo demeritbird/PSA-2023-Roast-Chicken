@@ -1,1 +1,19 @@
 @use "./../../../styles/main.scss" as *;
+
+.background {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  height: 80rem;
+  width: 150rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
