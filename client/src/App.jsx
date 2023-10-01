@@ -13,16 +13,20 @@ function App() {
   const initialRouteState = {
     dashboard: true,
     changes: false,
+    stats: false,
   };
   const [routeState, routeDispatch] = useReducer(routeReducer, initialRouteState);
   function routeReducer(_, action) {
     let newRouteState;
     switch (action.type) {
       case 'dashboard':
-        newRouteState = { dashboard: true, changes: false };
+        newRouteState = { dashboard: true, changes: false, stats: false };
         break;
       case 'changes':
-        newRouteState = { dashboard: false, changes: true };
+        newRouteState = { dashboard: false, changes: true, stats: false };
+        break;
+      case 'stats':
+        newRouteState = { dashboard: false, changes: false, stats: true };
         break;
       default:
         throw new Error();
@@ -34,6 +38,8 @@ function App() {
       navigate('/');
     } else if (routeState.changes) {
       navigate('/changes');
+    } else if (routeState.stats) {
+      navigate('/stats');
     }
   }, [routeState.dashboard, routeState.changes, navigate]);
 
@@ -113,6 +119,35 @@ function App() {
                   </div>
                   <h4 className={`${styles['sidebar__route-text']}`}>Changes</h4>
                 </div>
+                <div
+                  className={`${styles['sidebar__route']} 
+                              ${
+                                routeState.stats ? `${styles['sidebar__route--active']}` : ''
+                              }`}
+                  onClick={() =>
+                    routeDispatch({
+                      type: 'stats',
+                    })
+                  }
+                >
+                  <div className={`${styles['sidebar__route-icon']}`}>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      strokeWidth={1.5}
+                      stroke='currentColor'
+                      className='w-6 h-6'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        d='M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z'
+                      />
+                    </svg>
+                  </div>
+                  <h4 className={`${styles['sidebar__route-text']}`}>Stats</h4>
+                </div>
               </div>
             </div>
           </aside>
@@ -136,6 +171,7 @@ function App() {
               <Routes>
                 <Route path='/' element={<DashboardLayout />} />
                 <Route path='/changes' element={<ChangesLayout />} />
+                <Route path='/stats' element={<div>stats</div>} />
               </Routes>
             </main>
           </div>
