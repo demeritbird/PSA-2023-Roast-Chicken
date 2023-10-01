@@ -77,12 +77,15 @@ const DataContext = createContext({
   setTeamArr: () => {},
   selectTeamNo: 0,
   setSelectTeamNo: () => {},
+  result: [],
+  setResult: () => {},
 });
 
 export function DataProvider(props) {
   const [memberArr, setMemberArr] = useState(initialMemberArr);
   const [teamArr, setTeamArr] = useState(initialTeamArr);
   const [selectTeamNo, setSelectTeamNo] = useState(0);
+  const [result, setResult] = useState([]);
 
   const dataContextValue = {
     memberArr: memberArr,
@@ -91,6 +94,8 @@ export function DataProvider(props) {
     setTeamArr: setTeamArr,
     selectTeamNo: selectTeamNo,
     setSelectTeamNo: setSelectTeamNo,
+    result: result,
+    setResult: setResult,
   };
 
   return (

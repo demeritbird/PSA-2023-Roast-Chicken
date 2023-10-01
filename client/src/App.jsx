@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useReducer } from 'react';
+import { Fragment, useEffect, useReducer, useState } from 'react';
 import axios from 'axios';
 import styles from './App.module.scss';
 import { Routes, Route } from 'react-router-dom';
@@ -10,9 +10,24 @@ import useData from './hooks/useData';
 
 function App() {
   const navigate = useNavigate();
-  const { teamArr, memberArr } = useData();
+  const { teamArr, memberArr, result, setResult } = useData();
 
+  const [availableTeamIdArr, setAvailableTeamIdArr] = useState(teamArr.map((obj) => obj.id));
+  const [filledTeamIdArr, setFilledTeamIdArr] = useState({});
   const totalArr = [memberArr, teamArr];
+
+  useEffect(() => {
+    console.log(availableTeamIdArr, 'available');
+    console.log(filledTeamIdArr, 'filled');
+
+    setResult(filledTeamIdArr);
+  }, [
+    filledTeamIdArr,
+    setFilledTeamIdArr,
+    availableTeamIdArr,
+    setAvailableTeamIdArr,
+    setResult,
+  ]);
 
   const initialRouteState = {
     dashboard: true,
@@ -45,12 +60,88 @@ function App() {
     axios
       .post('http://127.0.0.1:8000/', totalArr)
       .then((res) => {
-        console.log(res.data);
+        const entries = Object.entries(JSON.parse(res.data.result)).sort(
+          (a, b) => a[1].length - b[1].length
+        );
+        console.log(JSON.parse(res.data.result));
+
+        let maxLength = 0;
+        for (const [, subarray] of entries) {
+          if (subarray.length > maxLength) {
+            maxLength = subarray.length;
+          }
+        }
+        let tempfilledMemberArr = [];
+        let tempAvailableTeamIdArr = availableTeamIdArr;
+
+        // ["1", [101,102]]
+        // First round: assign them to original group
+        entries.forEach((cur, idx) => {
+          if (cur[0] === (cur[1][0] - 100).toString()) {
+            setFilledTeamIdArr((prevFilledTeamIdArr) => ({
+              ...prevFilledTeamIdArr,
+              [cur[0]]: {
+                team: cur[1][0],
+                type: 1,
+                same: cur[0] === (cur[1][0] - 100).toString(),
+              },
+            }));
+            setAvailableTeamIdArr((prevAvailableTeamIdArr) =>
+              prevAvailableTeamIdArr.filter((item) => item !== cur[1][0])
+            );
+            tempAvailableTeamIdArr = tempAvailableTeamIdArr.filter(
+              (item) => item !== cur[1][0]
+            );
+          } else {
+            tempfilledMemberArr.push(cur);
+          }
+        });
+
+        // second round, if they have more than 1 pref, then try to search for them and use them
+        tempfilledMemberArr.forEach((cur) => {
+          cur[1].forEach((pref) => {
+            if (tempAvailableTeamIdArr.includes(pref)) {
+              setFilledTeamIdArr((prevFilledTeamIdArr) => ({
+                ...prevFilledTeamIdArr,
+                [cur[0]]: { team: pref, type: 2, same: cur[0] === pref },
+              }));
+              setAvailableTeamIdArr((prevAvailableTeamIdArr) =>
+                prevAvailableTeamIdArr.filter((item) => item !== pref)
+              );
+              tempAvailableTeamIdArr = tempAvailableTeamIdArr.filter((item) => item !== pref);
+              tempfilledMemberArr = tempAvailableTeamIdArr.filter((item) => item !== cur);
+              return;
+            }
+          });
+        });
+
+        //third round, if same id and same team id, match them together.
+        tempAvailableTeamIdArr.forEach((cur, idx) => {
+          setFilledTeamIdArr((prevFilledTeamIdArr) => ({
+            ...prevFilledTeamIdArr,
+            [tempfilledMemberArr[idx][0]]: {
+              team: cur,
+              type: 3,
+              same: tempfilledMemberArr[idx][0] === (cur - 100).toString(),
+            },
+          }));
+          setAvailableTeamIdArr((prevAvailableTeamIdArr) =>
+            prevAvailableTeamIdArr.filter((item) => item !== cur)
+          );
+          tempAvailableTeamIdArr = tempAvailableTeamIdArr.filter((item) => item !== cur);
+        });
       })
       .catch((err) => {
         console.error(err);
       });
   }, []);
+
+  let count = 0;
+  for (const key in result) {
+    if (Object.hasOwnProperty.call(result, key) && result[key].same === false) {
+      count++;
+    }
+  }
 
   return (
     <Fragment>
@@ -131,7 +222,7 @@ function App() {
               </h1>
               <h4 className={styles['container__header-changes']}>
                 <span className={styles['container__header-changes--highlight']}>
-                  5 changes
+                  {count} change(s)
                 </span>{' '}
                 to be made
               </h4>
