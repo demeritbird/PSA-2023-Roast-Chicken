@@ -64,7 +64,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .post('http://127.0.0.1:8000/', totalArr)
+      .post(`${import.meta.env.VITE_LINK}`, totalArr)
       .then((res) => {
         const entries = Object.entries(JSON.parse(res.data.result)).sort(
           (a, b) => a[1].length - b[1].length
