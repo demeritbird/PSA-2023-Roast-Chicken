@@ -1,0 +1,18 @@
+.chart__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.chart__size {
+  width: 80%;
+  height: 80%;
+}
+
+.chart__title {
+  text-align: center;
+  color: black;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
