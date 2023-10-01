@@ -16,7 +16,7 @@ def calculate_assignments(request, top_n=3):
     """
 
     # Format and retrieve data
-    data = json.loads(request)
+    data = request
     employees = get_employees(data)
     projects = get_projects(data)
 
@@ -24,7 +24,7 @@ def calculate_assignments(request, top_n=3):
     for employee in employees:
         skills = employee.get('skills')
         skill_embeddings = [get_embedding_from_db(
-            get_description(skill), skill) for skill in skills]
+            skill) for skill in skills]
         
         # Calculate the average of each employee's skills embeddings
         avg_embedding = [sum(x)/len(x) for x in zip(*skill_embeddings)]
@@ -34,7 +34,7 @@ def calculate_assignments(request, top_n=3):
     for project in projects:
         skills_needed = project.get('skills_needed')
         skill_embeddings = [get_embedding_from_db(
-            get_description(skill), skill) for skill in skills_needed]
+            skill) for skill in skills_needed]
         
         # Calculate the average of each project's needed skills embeddings
         avg_embedding = [sum(x)/len(x) for x in zip(*skill_embeddings)]
@@ -80,7 +80,7 @@ def calculate_minimal_reassignments(request, top_n=3, threshold=0.95):
     for employee in employees:
         skills = employee.get('skills')
         skill_embeddings = [get_embedding_from_db(
-            get_description(skill), skill) for skill in skills]
+             skill) for skill in skills]
         
         # # Calculate the average of each employee's skills embeddings
         avg_embedding = [sum(x)/len(x) for x in zip(*skill_embeddings)]
@@ -89,7 +89,7 @@ def calculate_minimal_reassignments(request, top_n=3, threshold=0.95):
     for project in projects:
         skills_needed = project.get('skills_needed')
         skill_embeddings = [get_embedding_from_db(
-            get_description(skill), skill) for skill in skills_needed]
+             skill) for skill in skills_needed]
         
         # Calculate the average of each project's needed skills embeddings
         avg_embedding = [sum(x)/len(x) for x in zip(*skill_embeddings)]

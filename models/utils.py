@@ -37,10 +37,10 @@ def get_embedding(description):
     - list: The embedding for the given description.
     """
 
-    sleep(10) # Wait for n seconds to avoid rate limiting (3rpm)
+    sleep(15) # Wait for n seconds to avoid rate limiting (3rpm)
     return openai.Embedding.create(input=[description], model="text-embedding-ada-002")['data'][0]['embedding']
 
-def get_embedding_from_db(description, skill, db_path="embeddings.db"):
+def get_embedding_from_db(skill, db_path="embeddings.db"):
     """
     Retrieves the embedding for a given skill from the database.
     If the embedding does not exist in the database, it fetches the embedding using the get_embedding function
@@ -68,7 +68,8 @@ def get_embedding_from_db(description, skill, db_path="embeddings.db"):
         # If the embedding does not exist, fetch it using the get_embedding function
         print(f"Embedding for '{skill}' not found in database. Fetching it now...")
         try:
-            embedding = get_embedding(description)
+            gpt_desc = get_description(skill)
+            embedding = get_embedding(gpt_desc)
         except Exception as e:
             print(f"Error fetching embedding for '{skill}': {e}")
             return None
